@@ -1,0 +1,1 @@
+A dictionary and thesaurus that uses 2 APIs from the Merriam-Webster dictionary.  Written with NodeJS and ExpressJS.
