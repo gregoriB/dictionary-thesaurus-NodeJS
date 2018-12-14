@@ -1,1 +1,1 @@
-A dictionary and thesaurus that uses 2 APIs from the Merriam-Webster dictionary.  Written with NodeJS and ExpressJS.
+A dictionary and thesaurus that uses the Oxford dictionary API.  Written with NodeJS and ExpressJS.  MySQL implementation coming soon.

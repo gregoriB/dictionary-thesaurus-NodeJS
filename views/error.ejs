@@ -1,0 +1,15 @@
+<% include ./partials/header %>
+
+<h1>ERROR: <%= status %></h1>
+<% if (status === 404) { %>
+  <p>Word not found.  Please try another one.
+<% } else { %>
+  <h3>Look up another word?</h3>
+<% } %>
+
+<form method='POST' action='/results'>
+  <input type='text' placeholder=' SEARCH' name='input' autofocus />
+  <button type='submit'>GO!</button>
+</form>
+
+<% include ./partials/footer %>

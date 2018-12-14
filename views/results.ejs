@@ -1,0 +1,75 @@
+<% include ./partials/header %>
+
+<h1 class='banner'>DICTIONARY AND THESAURUS</h1>
+
+<h2 class='word'>"<%= results.word %>"</h2>
+
+<p class='inflectionOf'><% if (results.inflectionOf)  { %> 
+  Inflection of: <em><%= results.inflectionOf %></em>
+<% } %></p>
+
+<% let checkedTypes = { listOfTypes: []} %>
+<% results.types.forEach(type => { %>
+  <% if (!checkedTypes[type.lexicalCategory]) { %>
+    <% checkedTypes.listOfTypes.push(' ' + type.lexicalCategory.toLowerCase()) %>
+    <% checkedTypes[type.lexicalCategory] = true %>
+  <% } %>
+<% }) %>
+
+<p class='type'><%= checkedTypes.listOfTypes %></p>
+
+<ul class='definitions'>
+    <% let count = 0 %>
+    <% for (let i = 0; i < results.definitions.length; i++) { %>
+      <% if (results.definitions[i].definitions) { %>
+        <% count++ %>
+        <li class='definition'> <strong><%= count %>:</strong> <%= results.definitions[i].definitions[0] %></li>
+      <% } %>
+    <% } %>
+</ul>
+
+
+<div class='thesaurus'>
+
+<h3>Synonyms:</h3>
+<ul class='synonyms'>
+  <% for (let i = 0; i < results.thesaurus.length; i++) { %> 
+    <% if (results.thesaurus[i].synonyms) { %>
+      <% for (let j = 0; j < results.thesaurus[i].synonyms.length; j++) { %>
+         <!--all entries except for the last one have a comma -->
+        <% if ( i + 1 === results.thesaurus.length && j + 1 === results.thesaurus[i].synonyms.length) { %>
+          <li class='synonym'><%= results.thesaurus[i].synonyms[j].text %></li>
+        <% } else { %>
+          <li class='synonym'><%= results.thesaurus[i].synonyms[j].text %>, </li>
+        <% } %>
+      <% } %>
+    <% } %>
+  <% } %> 
+</ul>
+
+<h3>Antonyms:</h3>
+<ul class='antonyms'>
+  <% for (let i = 0; i < results.thesaurus.length; i++) { %> 
+    <% if (results.thesaurus[i].antonyms) { %>
+      <% for (let j = 0; j < results.thesaurus[i].antonyms.length; j++) { %>
+        <!--all entries except for the last one have a comma -->
+        <% if ( i + 1 === results.thesaurus.length && j + 1 === results.thesaurus[i].antonyms.length) { %>
+          <li class='antonym'><%= results.thesaurus[i].antonyms[j].text %></li>
+        <% } else { %>
+          <li class='antonym'><%= results.thesaurus[i].antonyms[j].text %>, </li>
+        <% } %>
+      <% } %>
+    <% } %>
+  <% } %> 
+</ul>
+
+</div>
+
+<h3>Look up another word?</h3>
+
+<form method='POST' action='/results'>
+  <input type='text' placeholder=' SEARCH' name='input' />
+  <button id='submit' type='submit'>GO!</button>
+</form>
+
+<% include ./partials/footer %>
