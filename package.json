@@ -7,7 +7,6 @@
     "dotenv": "^6.2.0",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
-    "mysql": "^2.16.0",
     "request": "^2.88.0"
   },
   "devDependencies": {},
@@ -21,8 +20,8 @@
   "keywords": [
     "dictionary",
     "api",
-    "mysql",
     "sql",
+    "mysql",
     "nodejs",
     "express"
   ],

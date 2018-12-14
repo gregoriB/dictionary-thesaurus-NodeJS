@@ -7,8 +7,6 @@ app.use(express.static('public'));
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: false }));
 
-let inflection;
-
 let options = {
   url: '',
   headers: {
@@ -18,36 +16,20 @@ let options = {
   }
 }
 
-let results = {
-  inflectionOf: undefined,
-  word: '', 
-  definitions: '',
-  thesaurus: '',
-  types: ''
-}
-
-let obj;
+let inflection;
+let results = {}
 
 app.get('/', (req, res) => res.render('home'));
 
-app.post('/results', (req, res) => {
-  const input = req.body.input;
-  options.url = 'https://od-api.oxforddictionaries.com:443/api/v1/inflections/en/' + input;
-  inflectionRequest(input, res).then(() => definitionRequest(input, res)).then(() => thesaurusRequest(input, res));
-});
-
 const inflectionRequest = (input, res) => {
   return new Promise((resolve, reject) => {
-    request(options, (errInflection, responseInflection, bodyInflection) => {
-      const status = responseInflection.statusCode;
+    request(options, (err, response, body) => {
+      const status = response.statusCode;
       if (status !== 200) {
         return res.render('error', {status: status});
       }
-      if (errInflection) {
-        console.log('error: ', errInflection);
-        throw errInflection;
-      };
-      let parsed = JSON.parse(bodyInflection);
+      if (err) throw err;    
+      let parsed = JSON.parse(body);
       const inflectionOf = parsed.results[0].lexicalEntries[0].inflectionOf[0].text.toLowerCase();
       options.url = 'https://od-api.oxforddictionaries.com:443/api/v1/entries/en/' + inflectionOf;
       inflection = inflectionOf !== input ? inflectionOf : undefined;
@@ -58,18 +40,14 @@ const inflectionRequest = (input, res) => {
 
 const definitionRequest = (input, res) => {
   return new Promise((resolve, reject) => {
-    request(options, (errDefinition, responseDefinition, bodyDefinition) => {
-      if (errDefinition) {
-        console.log('error');
-        throw errDefinition;
-      }
-      parsed = JSON.parse(bodyDefinition);
+    request(options, (err, response, body) => {
+      if (err) throw err;    
+      let parsed = JSON.parse(body);
       results = {
         word: input, 
         definitions: parsed.results[0].lexicalEntries[0].entries[0].senses,
         types: parsed.results[0].lexicalEntries
       }
-      obj = parsed;
       if (inflection) {
         results.inflectionOf = inflection;
       }
@@ -81,23 +59,21 @@ const definitionRequest = (input, res) => {
 const thesaurusRequest = (input, res) => {
   return new Promise((resolve, reject) => {
     options.url = options.url + '/synonyms;antonyms'
-    request(options, (errThesaurus, responseThesaurus, bodyThesaurus) => {
-      const status = responseThesaurus.statusCode;
-      if (status !== 200) {
-        return res.render('error', {status: status});
-      }
-      if (errThesaurus) {
-        console.log('error');
-        throw errThesaurus;
-      }
-      parsed = JSON.parse(bodyThesaurus);
+    request(options, (err, response, body) => { 
+      if (err) throw err;    
+      let parsed = JSON.parse(body);
       results.thesaurus = parsed.results[0].lexicalEntries[0].entries[0].senses
       res.render('results', {results});
-      // res.send(results.thesaurus)
       resolve();
     });
   });
 }
+
+app.post('/results', (req, res) => {
+  const input = req.body.input;
+  options.url = 'https://od-api.oxforddictionaries.com:443/api/v1/inflections/en/' + input;
+  inflectionRequest(input, res).then(() => definitionRequest(input, res)).then(() => thesaurusRequest(input, res));
+});
 
 const listener = app.listen(8080, () => {
   console.log('app listening on port: ' + listener.address().port);
