@@ -23,7 +23,16 @@
     <% for (let i = 0; i < results.definitions.length; i++) { %>
       <% if (results.definitions[i].definitions) { %>
         <% count++ %>
-        <li class='definition'> <strong><%= count %>:</strong> <%= results.definitions[i].definitions[0] %></li>
+        <% definition = results.definitions[i].definitions[0] %>
+        <li class='definition'>
+        <% if (definition[definition.length - 1] !== '.') { %>
+          <% definition += '.' %>
+        <% } %>
+        <% capitalized = definition[0] %>
+        <% capitalizedDefinition = capitalized.toUpperCase() + definition.slice(1) %>
+          <strong><%= count %>: </strong> 
+          <%= capitalizedDefinition %>
+        </li>
       <% } %>
     <% } %>
 </ul>
@@ -31,37 +40,51 @@
 
 <div class='thesaurus'>
 
-<h3>Synonyms:</h3>
-<ul class='synonyms'>
-  <% for (let i = 0; i < results.thesaurus.length; i++) { %> 
-    <% if (results.thesaurus[i].synonyms) { %>
-      <% for (let j = 0; j < results.thesaurus[i].synonyms.length; j++) { %>
-         <!--all entries except for the last one have a comma -->
-        <% if ( i + 1 === results.thesaurus.length && j + 1 === results.thesaurus[i].synonyms.length) { %>
-          <li class='synonym'><%= results.thesaurus[i].synonyms[j].text %></li>
-        <% } else { %>
-          <li class='synonym'><%= results.thesaurus[i].synonyms[j].text %>, </li>
-        <% } %>
-      <% } %>
-    <% } %>
-  <% } %> 
-</ul>
+  <h3>Synonyms:</h3>
 
-<h3>Antonyms:</h3>
-<ul class='antonyms'>
-  <% for (let i = 0; i < results.thesaurus.length; i++) { %> 
-    <% if (results.thesaurus[i].antonyms) { %>
-      <% for (let j = 0; j < results.thesaurus[i].antonyms.length; j++) { %>
-        <!--all entries except for the last one have a comma -->
-        <% if ( i + 1 === results.thesaurus.length && j + 1 === results.thesaurus[i].antonyms.length) { %>
-          <li class='antonym'><%= results.thesaurus[i].antonyms[j].text %></li>
-        <% } else { %>
-          <li class='antonym'><%= results.thesaurus[i].antonyms[j].text %>, </li>
-        <% } %>
+  <% let synonymList = [] %>
+    <% results.thesaurus.forEach(type => { %>
+      <% if (type.synonyms) { %>
+        <% type.synonyms.forEach(syn => { %>
+          <% synonymList.push(syn.text) %>
+       <% }) %>
       <% } %>
-    <% } %>
-  <% } %> 
-</ul>
+    <% }) %>
+
+  <ul class='synonyms'>
+    <% synonymList.map(syn => { %>
+      <li class='synonym'>
+      <% if (syn === synonymList[synonymList.length - 1]) { %>
+        <%= syn %>
+      <% } else { %>
+        <%= syn + ',' %>
+      <% } %>
+      </li>
+    <% }) %>
+  </ul>
+
+  <h3>Antonyms:</h3>
+
+  <% let antonymList = [] %>
+    <% results.thesaurus.forEach(type => { %>
+      <% if (type.antonyms) { %>
+        <% type.antonyms.forEach(ant => { %>
+          <% antonymList.push(ant.text) %>
+       <% }) %>
+      <% } %>
+    <% }) %>
+
+  <ul class='antonyms'>
+    <% antonymList.map(ant => { %>
+      <li class='antonym'>
+      <% if (ant === antonymList[antonymList.length - 1]) { %>
+        <%= ant %>
+      <% } else { %>
+        <%= ant + ',' %>
+      <% } %>
+      </li>
+    <% }) %>
+  </ul>
 
 </div>
 

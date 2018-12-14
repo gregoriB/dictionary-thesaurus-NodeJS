@@ -72,7 +72,9 @@ const thesaurusRequest = (input, res) => {
 app.post('/results', (req, res) => {
   const input = req.body.input;
   options.url = 'https://od-api.oxforddictionaries.com:443/api/v1/inflections/en/' + input;
-  inflectionRequest(input, res).then(() => definitionRequest(input, res)).then(() => thesaurusRequest(input, res));
+  inflectionRequest(input, res)
+  .then(() => definitionRequest(input, res))
+  .then(() => thesaurusRequest(input, res));
 });
 
 const listener = app.listen(8080, () => {
