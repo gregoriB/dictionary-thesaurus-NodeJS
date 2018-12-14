@@ -4,4 +4,5 @@ To install, clone the repo and the use `npm install` to install all necesary dep
 
 Uses *dotenv* to keep the API key separate and hidden from the public.  Create a file called '.env' and add you api key to it like this:
 
-`API_KEY:yourkeygoeshere`
+`APP_ID:yourappidgoeshere`
+`APP_KEY:yourkeygoeshere`
