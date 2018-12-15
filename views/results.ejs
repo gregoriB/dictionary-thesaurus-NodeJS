@@ -4,9 +4,11 @@
 
 <h2 class='word'>"<%= results.word %>"</h2>
 
-<p class='inflectionOf'><% if (results.inflectionOf)  { %> 
-  Inflection of: <em><%= results.inflectionOf %></em>
-<% } %></p>
+<p class='inflectionOf'>
+  <% if (results.inflectionOf)  { %> 
+    <%= results.tense %> tense of <em><%= results.inflectionOf.toLowerCase() %></em>
+  <% } %>
+</p>
 
 <% let checkedTypes = { listOfTypes: []} %>
 <% results.types.forEach(type => { %>

@@ -16,7 +16,6 @@ let options = {
   }
 }
 
-let inflection;
 let results = {}
 
 app.get('/', (req, res) => res.render('home'));
@@ -25,14 +24,21 @@ const inflectionRequest = (input, res) => {
   return new Promise((resolve, reject) => {
     request(options, (err, response, body) => {
       const status = response.statusCode;
+      if (err) throw err;
       if (status !== 200) {
         return res.render('error', {status: status});
       }
-      if (err) throw err;    
       let parsed = JSON.parse(body);
-      const inflectionOf = parsed.results[0].lexicalEntries[0].inflectionOf[0].text.toLowerCase();
-      options.url = 'https://od-api.oxforddictionaries.com:443/api/v1/entries/en/' + inflectionOf;
-      inflection = inflectionOf !== input ? inflectionOf : undefined;
+      const inflection = parsed.results[0].lexicalEntries[0].inflectionOf[0].text.toLowerCase();
+      options.url = 'https://od-api.oxforddictionaries.com:443/api/v1/entries/en/' + inflection;
+      if (inflection !== input) {
+        results = {
+          inflectionOf: inflection,
+          tense: parsed.results[0].lexicalEntries[0].grammaticalFeatures[0].text
+        } 
+      } else {
+        results.inflectionOf = undefined;
+      }
       resolve();
     });
   });
@@ -43,14 +49,9 @@ const definitionRequest = (input, res) => {
     request(options, (err, response, body) => {
       if (err) throw err;    
       let parsed = JSON.parse(body);
-      results = {
-        word: input, 
-        definitions: parsed.results[0].lexicalEntries[0].entries[0].senses,
-        types: parsed.results[0].lexicalEntries
-      }
-      if (inflection) {
-        results.inflectionOf = inflection;
-      }
+        results.word = input;
+        results.definitions = parsed.results[0].lexicalEntries[0].entries[0].senses;
+        results.types = parsed.results[0].lexicalEntries;
       resolve();
     });
   });
