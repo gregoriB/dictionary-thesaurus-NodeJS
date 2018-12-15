@@ -1,10 +1,12 @@
 <% include ./partials/header %>
 
-<h1>DICTIONARY AND THESAURUS</h1>
+<nav id='navBar'></nav>
+
+<h1 class='banner'>DICTIONARY AND THESAURUS</h1>
 
 <form method='POST' action='/results'>
   <input type='text' placeholder=' SEARCH' name='input' autofocus />
-  <button type='submit'>GO!</button>
+  <button id='submit' type='submit'>GO!</button>
 </form>
 
 <% include ./partials/footer %>
