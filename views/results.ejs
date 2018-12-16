@@ -49,19 +49,18 @@
     <% } %>
 </ul>
 
-
 <div class='thesaurus'>
 
   <h3>Synonyms:</h3>
 
   <% let synonymList = [] %>
-    <% results.thesaurus.forEach(type => { %>
-      <% if (type.synonyms) { %>
-        <% type.synonyms.forEach(syn => { %>
-          <% synonymList.push(syn.text) %>
-       <% }) %>
-      <% } %>
-    <% }) %>
+  <% results.thesaurus.forEach(type => { %>
+    <% if (type.synonyms) { %>
+      <% type.synonyms.forEach(syn => { %>
+        <% synonymList.push(syn.text) %>
+      <% }) %>
+    <% } %>
+  <% }) %>
 
   <ul class='synonyms'>
     <% synonymList.map(syn => { %>
@@ -78,13 +77,13 @@
   <h3>Antonyms:</h3>
 
   <% let antonymList = [] %>
-    <% results.thesaurus.forEach(type => { %>
-      <% if (type.antonyms) { %>
-        <% type.antonyms.forEach(ant => { %>
-          <% antonymList.push(ant.text) %>
-       <% }) %>
-      <% } %>
-    <% }) %>
+  <% results.thesaurus.forEach(type => { %>
+    <% if (type.antonyms) { %>
+      <% type.antonyms.forEach(ant => { %>
+        <% antonymList.push(ant.text) %>
+      <% }) %>
+    <% } %>
+  <% }) %>
 
   <ul class='antonyms'>
     <% antonymList.map(ant => { %>

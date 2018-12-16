@@ -1,12 +1,15 @@
-require('dotenv').config();
-const express   = require('express');
-const app       = express();
-const request   = require('request');
+const express   = require('express'),
+      app       = express(),
+      request   = require('request'),
+      dotenv    = require('dotenv').config();
 
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: false }));
 
+app.get('/', (req, res) => res.render('home'));
+
+let results = {}
 let options = {
   url: '',
   headers: {
@@ -15,11 +18,6 @@ let options = {
     "app_key": process.env.APP_KEY
   }
 }
-
-let results = {}
-let test;
-
-app.get('/', (req, res) => res.render('home'));
 
 const inflectionRequest = (input, res) => {
   return new Promise((resolve, reject) => {
@@ -53,7 +51,6 @@ const definitionRequest = (input, res) => {
       if (status !== 200) {
         return res.render('error', {status: status});
       }      let parsed = JSON.parse(body);
-      test = parsed;
       results.word = input;
       results.definitions = parsed.results[0].lexicalEntries[0].entries[0].senses;
       results.types = parsed.results[0].lexicalEntries;
@@ -74,7 +71,6 @@ const thesaurusRequest = (input, res) => {
       }      let parsed = JSON.parse(body);
       results.thesaurus = parsed.results[0].lexicalEntries[0].entries[0].senses
       res.render('results', {results});
-      // res.send(test)
       resolve();
     });
   });
