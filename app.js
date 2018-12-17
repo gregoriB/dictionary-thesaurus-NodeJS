@@ -1,7 +1,10 @@
 const express   = require('express'),
       app       = express(),
-      request   = require('request'),
       dotenv    = require('dotenv').config();
+      ejs       = require('ejs'),
+      request   = require('request')
+
+ejs.delimiter = '?';
 
 app.use(express.static('public'));
 app.set('view engine', 'ejs');

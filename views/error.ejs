@@ -1,17 +1,17 @@
-<% include ./partials/header %>
+<? include ./partials/header ?>
 
 <nav id='navBar'></nav>
 
-<h1 class='banner'>ERROR: <%= status %></h1>
-<% if (status === 404) { %>
-  <p>Word not found.  Please try another one.
-<% } else { %>
+<h1 class='banner'>ERROR: <?= status ?></h1>
+<? if (status === 404) { ?>
+  <p>Word not found.  Please try another one.</p>
+<? } else { ?>
   <h3>Look up another word?</h3>
-<% } %>
+<? } ?>
 
 <form method='POST' action='/results'>
   <input type='text' placeholder=' SEARCH' name='input' autofocus />
   <button id='submit' type='submit'>GO!</button>
 </form>
 
-<% include ./partials/footer %>
+<? include ./partials/footer ?>

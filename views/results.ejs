@@ -1,8 +1,8 @@
-<% include ./partials/header %>
+<? include ./partials/header ?>
 
 <nav id='navBar'>
   <audio controls controlsList="nodownload">
-    <source src='<%= results.pronunciations %>' type='audio/mp3' />
+    <source src='<?= results.pronunciations ?>' type='audio/mp3' />
     Your browser does not support the audio element.
   </audio>
 
@@ -13,90 +13,90 @@
 </nav>
 
 <div >
-  <h2 class='word'>"<%= results.word %>"</h2>
+  <h2 class='word'>"<?= results.word ?>"</h2>
 
   <p class='inflectionOf'>
-    <% if (results.inflectionOf)  { %> 
-      <%= results.tense %> tense of <em><%= results.inflectionOf.toLowerCase() %></em>
-    <% } %>
+    <? if (results.inflectionOf)  { ?> 
+      <?= results.tense ?> tense of <em><?= results.inflectionOf.toLowerCase() ?></em>
+    <? } ?>
   </p>
-  <% let checkedTypes = { listOfTypes: []} %>
-  <% results.types.forEach(type => { %>
-    <% if (!checkedTypes[type.lexicalCategory]) { %>
-      <% checkedTypes.listOfTypes.push(' ' + type.lexicalCategory.toLowerCase()) %>
-      <% checkedTypes[type.lexicalCategory] = true %>
-    <% } %>
-  <% }) %>
-  <p class='type'><%= checkedTypes.listOfTypes %></p>
+  <? let checkedTypes = { listOfTypes: []} ?>
+  <? results.types.forEach(type => { ?>
+    <? if (!checkedTypes[type.lexicalCategory]) { ?>
+      <? checkedTypes.listOfTypes.push(' ' + type.lexicalCategory.toLowerCase()) ?>
+      <? checkedTypes[type.lexicalCategory] = true ?>
+    <? } ?>
+  <? }) ?>
+  <p class='type'><?= checkedTypes.listOfTypes ?></p>
 </div>
 
 <ul class='definitions'>
-    <% let count = 0 %>
-    <% for (let i = 0; i < results.definitions.length; i++) { %>
-      <% if (results.definitions[i].definitions) { %>
-        <% count++ %>
-        <% definition = results.definitions[i].definitions[0] %>
+    <? let count = 0 ?>
+    <? for (let i = 0; i < results.definitions.length; i++) { ?>
+      <? if (results.definitions[i].definitions) { ?>
+        <? count++ ?>
+        <? definition = results.definitions[i].definitions[0] ?>
         <li class='definition'>
-        <% if (definition[definition.length - 1] !== '.') { %>
-          <% definition += '.' %>
-        <% } %>
-        <% capitalized = definition[0] %>
-        <% capitalizedDefinition = capitalized.toUpperCase() + definition.slice(1) %>
-          <strong><%= count %>: </strong> 
-          <%= capitalizedDefinition %>
+        <? if (definition[definition.length - 1] !== '.') { ?>
+          <? definition += '.' ?>
+        <? } ?>
+        <? capitalized = definition[0] ?>
+        <? capitalizedDefinition = capitalized.toUpperCase() + definition.slice(1) ?>
+          <strong><?= count ?>: </strong> 
+          <?= capitalizedDefinition ?>
         </li>
-      <% } %>
-    <% } %>
+      <? } ?>
+    <? } ?>
 </ul>
 
 <div class='thesaurus'>
 
   <h3>Synonyms:</h3>
 
-  <% let synonymList = [] %>
-  <% results.thesaurus.forEach(type => { %>
-    <% if (type.synonyms) { %>
-      <% type.synonyms.forEach(syn => { %>
-        <% synonymList.push(syn.text) %>
-      <% }) %>
-    <% } %>
-  <% }) %>
+  <? let synonymList = [] ?>
+  <? results.thesaurus.forEach(type => { ?>
+    <? if (type.synonyms) { ?>
+      <? type.synonyms.forEach(syn => { ?>
+        <? synonymList.push(syn.text) ?>
+      <? }) ?>
+    <? } ?>
+  <? }) ?>
 
   <ul class='synonyms'>
-    <% synonymList.map(syn => { %>
+    <? synonymList.map(syn => { ?>
       <li class='synonym'>
-      <% if (syn === synonymList[synonymList.length - 1]) { %>
-        <%= syn %>
-      <% } else { %>
-        <%= syn + ',' %>
-      <% } %>
+      <? if (syn === synonymList[synonymList.length - 1]) { ?>
+        <?= syn ?>
+      <? } else { ?>
+        <?= syn + ',' ?>
+      <? } ?>
       </li>
-    <% }) %>
+    <? }) ?>
   </ul>
 
   <h3>Antonyms:</h3>
 
-  <% let antonymList = [] %>
-  <% results.thesaurus.forEach(type => { %>
-    <% if (type.antonyms) { %>
-      <% type.antonyms.forEach(ant => { %>
-        <% antonymList.push(ant.text) %>
-      <% }) %>
-    <% } %>
-  <% }) %>
+  <? let antonymList = [] ?>
+  <? results.thesaurus.forEach(type => { ?>
+    <? if (type.antonyms) { ?>
+      <? type.antonyms.forEach(ant => { ?>
+        <? antonymList.push(ant.text) ?>
+      <? }) ?>
+    <? } ?>
+  <? }) ?>
 
   <ul class='antonyms'>
-    <% antonymList.map(ant => { %>
+    <? antonymList.map(ant => { ?>
       <li class='antonym'>
-      <% if (ant === antonymList[antonymList.length - 1]) { %>
-        <%= ant %>
-      <% } else { %>
-        <%= ant + ',' %>
-      <% } %>
+      <? if (ant === antonymList[antonymList.length - 1]) { ?>
+        <?= ant ?>
+      <? } else { ?>
+        <?= ant + ',' ?>
+      <? } ?>
       </li>
-    <% }) %>
+    <? }) ?>
   </ul>
 
 </div>
 
-<% include ./partials/footer %>
+<? include ./partials/footer ?>
