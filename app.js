@@ -1,13 +1,10 @@
 const express   = require('express'),
       app       = express(),
-      dotenv    = require('dotenv').config();
-      ejs       = require('ejs'),
-      request   = require('request')
+      dotenv    = require('dotenv').config(),
+      request   = require('request');
 
-ejs.delimiter = '?';
-
-app.use(express.static('public'));
 app.set('view engine', 'ejs');
+app.use(express.static('public'));
 app.use(express.urlencoded({ extended: false }));
 
 app.get('/', (req, res) => res.render('home'));
@@ -53,7 +50,8 @@ const definitionRequest = (input, res) => {
       if (err) throw err;
       if (status !== 200) {
         return res.render('error', {status: status});
-      }      let parsed = JSON.parse(body);
+      }     
+      let parsed = JSON.parse(body);
       results.word = input;
       results.definitions = parsed.results[0].lexicalEntries[0].entries[0].senses;
       results.types = parsed.results[0].lexicalEntries;
@@ -71,7 +69,8 @@ const thesaurusRequest = (input, res) => {
       if (err) throw err;
       if (status !== 200) {
         return res.render('error', {status: status});
-      }      let parsed = JSON.parse(body);
+      }      
+      let parsed = JSON.parse(body);
       results.thesaurus = parsed.results[0].lexicalEntries[0].entries[0].senses
       res.render('results', {results});
       resolve();
