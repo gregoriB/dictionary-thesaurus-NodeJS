@@ -27,16 +27,21 @@ const inflectionRequest = (input, res) => {
       if (status !== 200) {
         return res.render('error', {status: status});
       }
-      let parsed = JSON.parse(body);
-      const inflection = parsed.results[0].lexicalEntries[0].inflectionOf[0].text.toLowerCase();
+      const parsed = JSON.parse(body);
+      let inflection = input;
+      if ((input[input.length - 1].toLowerCase() === 'd' && input[input.length - 2].toLowerCase() === 'e')  || 
+          (parsed.results[0].lexicalEntries[0].grammaticalFeatures[0].text.toLowerCase() === 'plural')      || 
+          (parsed.results[0].lexicalEntries[0].grammaticalFeatures[0].type.toLowerCase() === 'number')) {
+
+        inflection = parsed.results[0].lexicalEntries[0].inflectionOf[0].text.toLowerCase()
+      }
       options.url = 'https://od-api.oxforddictionaries.com:443/api/v1/entries/en/' + inflection;
+      results.inflectionOf = undefined;
       if (inflection !== input) {
         results = {
           inflectionOf: inflection,
           tense: parsed.results[0].lexicalEntries[0].grammaticalFeatures[0].text
         } 
-      } else {
-        results.inflectionOf = undefined;
       }
       resolve();
     });
@@ -51,7 +56,7 @@ const definitionRequest = (input, res) => {
       if (status !== 200) {
         return res.render('error', {status: status});
       }     
-      let parsed = JSON.parse(body);
+      const parsed = JSON.parse(body);
       results.word = input;
       results.definitions = parsed.results[0].lexicalEntries[0].entries[0].senses;
       results.types = parsed.results[0].lexicalEntries;
@@ -70,7 +75,7 @@ const thesaurusRequest = (input, res) => {
       if (status !== 200) {
         return res.render('error', {status: status});
       }      
-      let parsed = JSON.parse(body);
+      const parsed = JSON.parse(body);
       results.thesaurus = parsed.results[0].lexicalEntries[0].entries[0].senses
       res.render('results', {results});
       resolve();
@@ -78,8 +83,8 @@ const thesaurusRequest = (input, res) => {
   });
 }
 
-app.post('/results', (req, res) => {
-  const input = req.body.input;
+app.get('/results', (req, res) => {
+  const input = req.query.input;
   options.url = 'https://od-api.oxforddictionaries.com:443/api/v1/inflections/en/' + input;
   inflectionRequest(input, res)
   .then(() => definitionRequest(input, res))
