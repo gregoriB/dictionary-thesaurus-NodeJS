@@ -5,7 +5,6 @@ const express   = require('express'),
 
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
-app.use(express.urlencoded({ extended: false }));
 
 app.get('/', (req, res) => res.render('home'));
 
@@ -28,6 +27,7 @@ const inflectionRequest = (input, res) => {
         return res.render('error', {status: status});
       }
       const parsed = JSON.parse(body);
+      // res.send(parsed.results[0].lexicalEntries[0].inflectionOf[0].text)
       let inflection = input;
       if ((input[input.length - 1].toLowerCase() === 'd' && input[input.length - 2].toLowerCase() === 'e')  || 
           (parsed.results[0].lexicalEntries[0].grammaticalFeatures[0].text.toLowerCase() === 'plural')      || 
@@ -84,11 +84,15 @@ const thesaurusRequest = (input, res) => {
 }
 
 app.get('/results', (req, res) => {
-  const input = req.query.input;
+  const input = req.query.search;
   options.url = 'https://od-api.oxforddictionaries.com:443/api/v1/inflections/en/' + input;
   inflectionRequest(input, res)
   .then(() => definitionRequest(input, res))
   .then(() => thesaurusRequest(input, res));
+});
+
+app.get('*', (req, res) => {
+  res.render('error', {status: 'PAGE NOT FOUND'});
 });
 
 const listener = app.listen(8080, () => {
